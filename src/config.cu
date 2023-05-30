@@ -7,7 +7,6 @@ unsigned int globals::block_size = 256;
 
 Config::Config() {
   cudaGetDeviceCount(&globals::device_count);
-  epochs_ = 1000;
   use_gpu_ = globals::device_count;
 }
 

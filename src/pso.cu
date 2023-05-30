@@ -2,6 +2,8 @@
 
 SCAVENGE_NAMESPACE_BEGIN
 
+/* PSO Core Class Definitions */
+
 PSO::PSO(
   unsigned int num_particles, // aggregate init
   float inertia, 
@@ -12,7 +14,7 @@ PSO::PSO(
     cognition_(cognition),
     social_(social) {
   particles_ = new Particle[num_particles_]; // particles
-  d_particles_ = nullptr;
+  dev_particles_ = nullptr;
 
   best_idx_ = 0; // global best
   best_fitness_ = 0.0f;
@@ -26,38 +28,70 @@ PSO::PSO(
 PSO::~PSO() {
   if (particles_)
     free(particles_);
-  if (d_particles_)
-    cudaFree(d_particles_);
+  if (dev_particles_)
+    cudaFree(dev_particles_);
 }
 
-Particle PSO::operator[](unsigned int idx) {
+Particle& PSO::operator[](const unsigned int& idx) {
   return particles_[idx];
 }
 
-void PSO::run(unsigned int epochs) {
+void PSO::run(const unsigned int epochs) {
   settings_.epochs_ = epochs;
-  if (globals::device_count && settings_.use_gpu_);
-  else;
+  if (globals::device_count && settings_.use_gpu_)
+    simulate_gpu();
+  else
+    simulate_cpu();
 }
 
-void PSO::set_gpu(bool gpu) {
+void PSO::set_gpu(const bool& gpu) {
   settings_.use_gpu_ = gpu;
+}
+
+void PSO::simulate_cpu() {
+  unsigned int iteration = 0;
+  do {
+    
+    iteration++;
+  } while(iteration < settings_.epochs_);
+}
+
+void PSO::simulate_gpu() {
+  ;
 }
 
 void PSO::device_init() {
   unsigned int grid_size;
-  ssize_t particles_bytes;
+  unsigned int particles_bytes;
   curandState *state;
 
   settings_.use_gpu_ = true;
   particles_bytes = sizeof(Particle) * num_particles_;
 
-  cudaMalloc((void **) &d_particles_, particles_bytes);
+  cudaMalloc((void **) &dev_particles_, particles_bytes);
   cudaMalloc(&state, sizeof(curandState) * globals::block_size);
-  cudaMemcpy(d_particles_, particles_, particles_bytes, cudaMemcpyHostToDevice);
+  cudaMemcpy(dev_particles_, particles_, particles_bytes, cudaMemcpyHostToDevice);
 
   grid_size = (num_particles_ + globals::block_size - 1) / globals::block_size;
   kernel_curand_setup<<<grid_size, globals::block_size>>>(state, rand() % INT_MAX);
+}
+
+/* PSO Global (CUDA Kernel) / Device Helper Functions */
+
+namespace pso {
+
+  void update_particle_position() {
+    ;
+  }
+
+  void update_particle_velocity() {
+    ;
+  }
+
+  void update_global_best() {
+    ;
+  }
+
 }
 
 SCAVENGE_NAMESPACE_END

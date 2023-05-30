@@ -25,6 +25,8 @@ typedef float (*ScavengeTestFunction)(float, float);
 
 SCAVENGE_NAMESPACE_BEGIN
 
+/* Project-wide global/constant variables */
+
 namespace globals {
 
   extern int device_count;
@@ -32,10 +34,16 @@ namespace globals {
 
 }
 
+namespace constants {
+
+}
+
+/* Config class to maintain settings for each object */
+
 class Config {
   public:
     Config();
-    unsigned int epochs_;
+    unsigned int epochs_; // Initialized by ALGORITHM's run()
     bool use_gpu_;
 };
 
