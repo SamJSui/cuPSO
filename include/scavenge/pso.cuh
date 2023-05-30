@@ -1,8 +1,12 @@
-#ifndef PSO_CLASS_CUH
-#define PSO_CLASS_CUH
+#ifndef SCAVENGE_PSO_H
+#define SCAVENGE_PSO_H
 
-#include "../particle.h"
-#include "../vec2.h"
+#include "config.cuh"
+#include "cuda_interface.cuh"
+#include "particle.cuh"
+#include "vec2.cuh"
+
+SCAVENGE_NAMESPACE_BEGIN
 
 class PSO {
   public:
@@ -10,23 +14,23 @@ class PSO {
     ~PSO();
     Particle operator[](unsigned int);
     void run(unsigned int=1);
+    void set_gpu(bool);
   private:
     void device_init();
     void simulate_cpu();
     void simulate_gpu();
+    Config settings_;
     vec2 best_pos_;
     Particle *particles_;
     Particle *d_particles_;
-    int gpu_device_count_;
     unsigned int num_particles_;
-    unsigned int length_;
-    unsigned int epochs_;
     float inertia_;
     float cognition_;
     float social_;
     float best_fitness_;
     unsigned int best_idx_;
-    bool use_gpu_;
 };
 
-#endif // PSO_CLASS_CUH
+SCAVENGE_NAMESPACE_END
+
+#endif // SCAVENGE_PSO_H

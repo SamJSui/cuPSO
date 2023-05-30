@@ -1,25 +1,26 @@
-#include "pso.h"
+#include "pso.cuh"
 
-/// pso/class.cuh ///
+SCAVENGE_NAMESPACE_BEGIN
 
 PSO::PSO(
-    unsigned int num_particles, // aggregate init
-    float inertia, 
-    float cognition, 
-    float social) 
-    : num_particles_(num_particles),
-      inertia_(inertia),
-      cognition_(cognition),
-      social_(social) {
+  unsigned int num_particles, // aggregate init
+  float inertia, 
+  float cognition, 
+  float social) 
+  : num_particles_(num_particles),
+    inertia_(inertia),
+    cognition_(cognition),
+    social_(social) {
   particles_ = new Particle[num_particles_]; // particles
   d_particles_ = nullptr;
+
   best_idx_ = 0; // global best
   best_fitness_ = 0.0f;
-  cudaGetDeviceCount(&gpu_device_count_); // cuda
-  if (cudaGetDeviceCount > 0) 
+  
+  if (globals::device_count > 0) 
     device_init();
   else 
-    use_gpu_ = 0;
+    settings_.use_gpu_ = false;
 }
 
 PSO::~PSO() {
@@ -34,50 +35,29 @@ Particle PSO::operator[](unsigned int idx) {
 }
 
 void PSO::run(unsigned int epochs) {
-  if (gpu_device_count_ && use_gpu_)
-    simulate_gpu();
-  else
-    simulate_cpu();
+  settings_.epochs_ = epochs;
+  if (globals::device_count && settings_.use_gpu_);
+  else;
+}
+
+void PSO::set_gpu(bool gpu) {
+  settings_.use_gpu_ = gpu;
 }
 
 void PSO::device_init() {
   unsigned int grid_size;
   ssize_t particles_bytes;
   curandState *state;
-  use_gpu_ = 1;
+
+  settings_.use_gpu_ = true;
   particles_bytes = sizeof(Particle) * num_particles_;
+
   cudaMalloc((void **) &d_particles_, particles_bytes);
-  cudaMalloc(&state, sizeof(curandState) * config::block_size);
+  cudaMalloc(&state, sizeof(curandState) * globals::block_size);
   cudaMemcpy(d_particles_, particles_, particles_bytes, cudaMemcpyHostToDevice);
-  printf("host x: %f\n", particles_[39].best_pos_.x);
-  grid_size = (num_particles_ + config::block_size - 1) / config::block_size;
-  g_kernel_setup<<<grid_size, config::block_size>>>(state, rand() % INT_MAX, num_particles_);
-  g_pso_simulate<<<grid_size, config::block_size>>>(d_particles_, num_particles_);
+
+  grid_size = (num_particles_ + globals::block_size - 1) / globals::block_size;
+  kernel_curand_setup<<<grid_size, globals::block_size>>>(state, rand() % INT_MAX);
 }
 
-void PSO::simulate_cpu() {
-
-}
-
-void PSO::simulate_gpu() {
-
-}
-
-//// pso/simulate.cuh ////
-
-CUDA_GLOBAL void g_kernel_setup(
-    curandState *state, 
-    unsigned int seed, 
-    unsigned int num_particles) {
-  int idx = threadIdx.x + blockIdx.x * blockDim.x;
-  if (idx >= num_particles) return;
-  curand_init(seed, idx, 0, &state[idx]);
-}
-
-CUDA_GLOBAL void g_pso_simulate(Particle *d_particles, unsigned int num_particles) {
-  int idx = threadIdx.x + blockIdx.x * blockDim.x;
-  if (idx >= num_particles) return;
-  if (idx == 0) {
-    printf("dev x: %f\n", d_particles[39].best_pos_.x);
-  }
-}
+SCAVENGE_NAMESPACE_END
