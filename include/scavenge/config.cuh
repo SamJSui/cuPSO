@@ -1,6 +1,8 @@
 #ifndef SCAVENGE_CONFIG_H
 #define SCAVENGE_CONFIG_H
 
+#include <iostream>
+
 /* Scavenge Namespaces */
 
 #define SCAVENGE_NAMESPACE_BEGIN \

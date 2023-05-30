@@ -6,6 +6,10 @@
 #include "particle.cuh"
 #include "vec2.cuh"
 
+#define SCAVENGE_PSO_PARAMETER_INERTIA 0
+#define SCAVENGE_PSO_PARAMETER_COGNITION 1
+#define SCAVENGE_PSO_PARAMETER_SOCIAL 2
+
 SCAVENGE_NAMESPACE_BEGIN
 
 extern __device__ __constant__ float sim_params[3]; // Simulation Parameters
@@ -19,7 +23,7 @@ class PSO {
     PSO(const unsigned int=40, const float=0.5, const float=1.0, const float=1.0);
     ~PSO();
 
-    /* Overloaded operators */
+    /* Overloaded Operators */
 
     Particle& operator[](const unsigned int&);
     
@@ -30,6 +34,7 @@ class PSO {
     /* PSO Setters */
     
     void set_gpu(const bool&);
+    void set_test_function(const ScavengeTestFunction);
 
   private:
 
@@ -40,6 +45,9 @@ class PSO {
     /* CPU Simulation */
 
     void simulate_cpu();
+    void update_particle_position();
+    void update_particle_velocity();
+    void update_global_best();
 
     /* GPU Simulation */
 
@@ -64,7 +72,7 @@ class PSO {
     const float cognition_;
     const float social_;
 
-    /* Global Best Particle for Simulation */
+    /* Simulation Global Best */
 
     float best_fitness_;
     unsigned int best_idx_;
@@ -77,7 +85,7 @@ namespace pso {
   void update_particle_position();
   void update_particle_velocity();
   void update_global_best();
-  
+
 }
 
 SCAVENGE_NAMESPACE_END

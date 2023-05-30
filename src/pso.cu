@@ -13,12 +13,24 @@ PSO::PSO(
     inertia_(inertia),
     cognition_(cognition),
     social_(social) {
-  particles_ = new Particle[num_particles_]; // particles
+
+  /* Allocate particles */
+
+  particles_ = new Particle[num_particles_];
   dev_particles_ = nullptr;
 
-  best_idx_ = 0; // global best
+  /* Test Function Pointers */
+
+  test_fn_ = nullptr;
+  dev_test_fn_ = nullptr;
+
+  /* Simulation Global Best */
+
+  best_idx_ = 0;
   best_fitness_ = 0.0f;
   
+  /* CUDA */
+
   if (globals::device_count > 0) 
     device_init();
   else 
@@ -38,15 +50,29 @@ Particle& PSO::operator[](const unsigned int& idx) {
 
 void PSO::run(const unsigned int epochs) {
   settings_.epochs_ = epochs;
+  if (test_fn_ == nullptr) {
+    std::string NO_TEST_FUNCTION = 
+      "ERROR: PSO run() called without a test function";
+    std::cerr << NO_TEST_FUNCTION << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
   if (globals::device_count && settings_.use_gpu_)
     simulate_gpu();
   else
     simulate_cpu();
 }
 
+/* PSO Setters */
+
 void PSO::set_gpu(const bool& gpu) {
   settings_.use_gpu_ = gpu;
 }
+
+void PSO::set_test_function(const ScavengeTestFunction test_fn) {
+  test_fn_ = test_fn;
+}
+
+/* CPU Simulation */
 
 void PSO::simulate_cpu() {
   unsigned int iteration = 0;
@@ -54,6 +80,24 @@ void PSO::simulate_cpu() {
     
     iteration++;
   } while(iteration < settings_.epochs_);
+}
+
+void PSO::update_particle_position() {
+  for (unsigned int idx = 0; idx < num_particles_; idx++) {
+    ;
+  }
+}
+
+void PSO::update_particle_velocity() {
+  for (unsigned int idx = 0; idx < num_particles_; idx++) {
+    ;
+  }
+}
+
+void PSO::update_global_best() {
+  for (unsigned int idx = 0; idx < num_particles_; idx++) {
+    ;
+  }
 }
 
 void PSO::simulate_gpu() {
@@ -79,18 +123,6 @@ void PSO::device_init() {
 /* PSO Global (CUDA Kernel) / Device Helper Functions */
 
 namespace pso {
-
-  void update_particle_position() {
-    ;
-  }
-
-  void update_particle_velocity() {
-    ;
-  }
-
-  void update_global_best() {
-    ;
-  }
 
 }
 
