@@ -124,6 +124,19 @@ void PSO::device_init() {
 
 namespace pso {
 
+  __global__
+  void update_particle_position_gpu() {
+    ;
+  }
+  __global__
+  void update_particle_velocity_gpu() {
+    ;
+  }
+  __global__
+  void update_global_best_gpu() {
+    ;
+  }
+
 }
 
 SCAVENGE_NAMESPACE_END

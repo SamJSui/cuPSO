@@ -82,9 +82,9 @@ class PSO {
 
 namespace pso {
 
-  void update_particle_position();
-  void update_particle_velocity();
-  void update_global_best();
+  extern __global__ void update_particle_position_gpu();
+  extern __global__ void update_particle_velocity_gpu();
+  extern __global__ void update_global_best_gpu();
 
 }
 
