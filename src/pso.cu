@@ -84,7 +84,9 @@ void PSO::simulate_cpu() {
 
 void PSO::update_particle_position() {
   for (unsigned int idx = 0; idx < num_particles_; idx++) {
-    ;
+    float fitness = test_fn_(particles_[idx].pos_);
+    if (fitness < particles_[idx].best_fitness_)
+      particles_[idx].best_fitness_ = fitness;
   }
 }
 

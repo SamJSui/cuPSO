@@ -6,10 +6,6 @@
 #include "particle.cuh"
 #include "vec2.cuh"
 
-#define SCAVENGE_PSO_PARAMETER_INERTIA 0
-#define SCAVENGE_PSO_PARAMETER_COGNITION 1
-#define SCAVENGE_PSO_PARAMETER_SOCIAL 2
-
 SCAVENGE_NAMESPACE_BEGIN
 
 extern __device__ __constant__ float sim_params[3]; // Simulation Parameters
