@@ -65,7 +65,23 @@ Scavenge began as a COSC 420: Biologically-Inspired Computation final project at
 
 ## Usage
 
+**main.cu**
 
+```cpp
+#include <scavenge.h>
+
+__host__ __device__
+float scavenge::PSO::test_fn(scavenge::vec2 v) { // Set test function for the particles' fitness metric
+  return v.x*v.x + v.y*v.y;
+}
+
+int main(int argc, char **argv) {
+  scavenge::PSO pso;
+  unsigned int epochs = 1000;
+  pso.run(epochs); // Parameter allows for stepping through simulation
+  return 0;
+}
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
