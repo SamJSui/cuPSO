@@ -48,10 +48,13 @@ Scavenge began as a COSC 420: Biologically-Inspired Computation final project at
 ## Getting Started
 
 
+
 ### Prerequisites
 
 
+
 ### Installation
+
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -59,16 +62,24 @@ Scavenge began as a COSC 420: Biologically-Inspired Computation final project at
 
 
 <!-- USAGE EXAMPLES -->
+
 ## Usage
+
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
 
+- [ ] Particle Swarm Optimization (PSO)
+- [ ] Ant Colony Optimization (ACO)
+- [ ] SA (Simulated Annealing)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
@@ -76,6 +87,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ACKNOWLEDGMENTS -->
+
 ## Acknowledgments
 
 * [Julia Steed](https://github.com/juliasteed)

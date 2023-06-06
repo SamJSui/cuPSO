@@ -1,0 +1,10 @@
+#ifndef SCAVENGE_UTILS_NAMESPACE_H
+#define SCAVENGE_UTILS_NAMESPACE_H
+
+#define SCAVENGE_NAMESPACE_BEGIN \
+namespace scavenge { \
+
+#define SCAVENGE_NAMESPACE_END \
+} \
+
+#endif // SCAVENGE_UTILS_NAMESPACE_H

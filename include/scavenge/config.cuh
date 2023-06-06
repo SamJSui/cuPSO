@@ -1,15 +1,9 @@
 #ifndef SCAVENGE_CONFIG_H
 #define SCAVENGE_CONFIG_H
 
+#include "utils_namespace.h"
+
 #include <iostream>
-
-/* Scavenge Namespaces */
-
-#define SCAVENGE_NAMESPACE_BEGIN \
-namespace scavenge { \
-
-#define SCAVENGE_NAMESPACE_END \
-} \
 
 /* Cross-compatibility for .cu and .cpp files */
 
@@ -21,22 +15,14 @@ namespace scavenge { \
 #define __device__
 #endif
 
-/* Test function utilities */
-
-typedef float (*ScavengeTestFunction)(float, float);
-
 SCAVENGE_NAMESPACE_BEGIN
 
-/* Project-wide global/constant variables */
+/* Project-wide global variables */
 
 namespace globals {
 
   extern int device_count;
   extern unsigned int block_size;
-
-}
-
-namespace constants {
 
 }
 

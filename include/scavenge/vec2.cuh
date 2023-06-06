@@ -2,6 +2,7 @@
 #define SCAVENGE_VEC2_CUH
 
 #include "config.cuh"
+#include "utils_namespace.h"
 
 SCAVENGE_NAMESPACE_BEGIN
 

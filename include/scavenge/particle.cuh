@@ -2,6 +2,7 @@
 #define SCAVENGE_PARTICLE_H
 
 #include "vec2.cuh"
+
 #include <random>
 
 SCAVENGE_NAMESPACE_BEGIN
