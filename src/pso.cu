@@ -8,7 +8,9 @@ namespace pso {
 
   __global__
   void update_particle_position_gpu() {
+    int idx = blockDim.x * blockIdx.x + threadIdx.x;
     vec2 a(1.0, 2.0);
+    // printf("%f", dev_test_fn(a));
   }
   __global__
   void update_particle_velocity_gpu() {
@@ -24,14 +26,17 @@ namespace pso {
 /* PSO Core Class Definitions */
 
 PSO::PSO(
-  unsigned int n_p, // aggregate init
-  float i, 
-  float c, 
-  float s) 
-  : num_particles_(n_p),
-    inertia(i),
-    cognition(c),
-    social(s) {
+  unsigned int num_particles, // aggregate init
+  float inertia, 
+  float cognition, 
+  float social) 
+  : num_particles_(num_particles) {
+
+  /* Initialize parameters */
+
+  params[0] = inertia;
+  params[1] = cognition;
+  params[2] = social;
 
   /* Allocate particles */
 
@@ -63,8 +68,7 @@ Particle& PSO::operator[](const unsigned int& idx) {
 
 void PSO::run(const unsigned int epochs) {
   settings_.epochs_ = epochs;
-  best_fitness_ = test_fn(particles_[0].pos_);
-  printf("%f\n", best_fitness_);
+  best_fitness_ = pso::test_fn(particles_[0].pos_);
   if (globals::device_count && settings_.use_gpu_)
     simulate_gpu();
   else
@@ -89,7 +93,7 @@ void PSO::simulate_cpu() {
 
 void PSO::update_particle_position() {
   for (unsigned int idx = 0; idx < num_particles_; idx++) {
-    float new_fitness = test_fn(particles_[idx].pos_);
+    float new_fitness = pso::test_fn(particles_[idx].pos_);
     if (new_fitness < particles_[idx].best_fitness_)
       particles_[idx].best_fitness_ = new_fitness;
   }
@@ -97,6 +101,10 @@ void PSO::update_particle_position() {
 
 void PSO::update_particle_velocity() {
   for (unsigned int idx = 0; idx < num_particles_; idx++) {
+    float inertia = params[0];
+    float cognition = params[1];
+    float social = params[2];
+
     float rand_1 = Particle::dist_(Particle::gen_);
     float rand_2 = Particle::dist_(Particle::gen_);
     vec2 global_pos = particles_[best_idx_].best_pos_;

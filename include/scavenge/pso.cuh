@@ -9,12 +9,13 @@
 
 SCAVENGE_NAMESPACE_BEGIN
 
-__device__ __constant__ float sim_params[3]; // Simulation Parameters
+__device__ __constant__ float dev_params[3]; // Simulation Parameters
 
 /* Global (CUDA Kernel) / Device Helper Functions */
 
 namespace pso {
 
+  __host__ __device__ float test_fn(scavenge::vec2);
   extern __global__ void update_particle_position_gpu();
   extern __global__ void update_particle_velocity_gpu();
   extern __global__ void update_global_best_gpu();
@@ -41,13 +42,10 @@ class PSO {
     /* PSO Setters */
     
     void set_gpu(const bool&);
-    __host__ __device__ float test_fn(scavenge::vec2);
 
     /* PSO Simulation Parameters */
 
-    const float inertia;
-    const float cognition;
-    const float social;
+    float params[3];
 
   private:
 
